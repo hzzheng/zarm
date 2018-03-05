@@ -2,6 +2,7 @@ import React, { PureComponent, cloneElement } from 'react';
 import ReactDOM, { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 import PropsType from './PropsType';
+import getRequestAnimationFrame from '../utils/raf';
 // import Events from '../utils/events';
 
 export interface TooltipProps extends PropsType {
@@ -37,19 +38,21 @@ export default class Tooltip extends PureComponent<TooltipProps, any> {
     });
 
     // eslint-disable-next-line
-    const rect = findDOMNode(this.child).getBoundingClientRect();
-    const scrollTop = document.documentElement.scrollTop + document.body.scrollTop;
-    const style = {
-      left: rect.left,
-      top: rect.top + scrollTop,
-      width: rect.width,
-    };
+    getRequestAnimationFrame()(() => {
+      const rect = findDOMNode(this.child).getBoundingClientRect();
+      const scrollTop = document.documentElement.scrollTop + document.body.scrollTop;
+      const style = {
+        left: rect.left,
+        top: rect.top + scrollTop,
+        width: rect.width,
+      };
 
-    ReactDOM.render(
-      <div className={cls} style={style}>
-        <div className={`${prefixCls}-inner`}>{message}</div>
-      </div>
-      , window.zarmTooltip);
+      ReactDOM.render(
+        <div className={cls} style={style}>
+          <div className={`${prefixCls}-inner`}>{message}</div>
+        </div>
+        , window.zarmTooltip);
+    });
   }
 
   render() {
