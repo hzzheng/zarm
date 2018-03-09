@@ -5,6 +5,8 @@ import PropsType from './PropsType';
 import getRequestAnimationFrame from '../utils/raf';
 // import Events from '../utils/events';
 
+const raf = getRequestAnimationFrame();
+
 export interface TooltipProps extends PropsType {
   prefixCls?: string;
   className?: string;
@@ -38,7 +40,7 @@ export default class Tooltip extends PureComponent<TooltipProps, any> {
     });
 
     // eslint-disable-next-line
-    getRequestAnimationFrame()(() => {
+    raf(() => {
       const rect = findDOMNode(this.child).getBoundingClientRect();
       const scrollTop = document.documentElement.scrollTop + document.body.scrollTop;
       const style = {
